@@ -12,4 +12,8 @@ class HomeController
     {
         return View::make('index');
     }
+    public function about(): View
+    {
+        return View::make('about');
+    }
 }

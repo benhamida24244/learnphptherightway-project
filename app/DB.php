@@ -30,6 +30,18 @@ class DB
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage(), (int) $e->getCode());
         }
+        $this->createTransactionsTable();
+
+    }
+    private function createTransactionsTable()
+    {
+        $this->pdo->exec('CREATE TABLE IF NOT EXISTS transactions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            Date DATE NOT NULL,
+            `Check` VARCHAR(255) NOT NULL,
+            Description TEXT,
+            Amount INT NOT NULL
+        )');
     }
 
     public function __call(string $name, array $arguments)
