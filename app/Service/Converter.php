@@ -4,7 +4,7 @@ namespace App\Service;
 
 class Converter
 {
-    public static function convertAmountToInt(string $amountString): int
+    public static function convertAmountToFloat(string $amountString): float
     {
         // Remove currency symbols ($) and thousands separators (,)
         $cleanedAmount = str_replace(['$', ','], '', $amountString);
@@ -29,6 +29,6 @@ class Converter
         }
 
         // Round to the nearest integer as the database column 'Amount' is INT
-        return (int) round($numericAmount);
+        return (float) $numericAmount;
     }
 }

@@ -37,10 +37,10 @@ class DB
     {
         $this->pdo->exec('CREATE TABLE IF NOT EXISTS transactions (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            Date DATE NOT NULL,
-            `Check` VARCHAR(255) NOT NULL,
+            Date VARCHAR(255) NOT NULL,
+            `Check` VARCHAR(255),
             Description TEXT,
-            Amount INT NOT NULL
+            Amount FLOAT NOT NULL
         )');
     }
 

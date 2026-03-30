@@ -34,7 +34,7 @@ function normalizeRequestUri(string $requestUri): string
 $router = new Router();
 
 $router
-    ->get('/', [HomeController::class, 'index'])
+    ->get('/', [TransactionController::class, 'show'])
     ->get('/about', [HomeController::class, 'about'])
     ->post('/add-transaction', [TransactionController::class, 'add'])
     ->get('/show-transactions', [TransactionController::class, 'show'])

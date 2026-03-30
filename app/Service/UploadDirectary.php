@@ -15,11 +15,11 @@ class UploadDirectary
     {
        if(!is_dir($this->storagePath))
             {
-                mkdir($this->storagePath);
+                mkdir($this->storagePath, 0777, true);
             }
         $this->filePath = $this->storagePath. uniqid(). '-' . $this->file['name'];
         // File should be a CSV
-        if (pathinfo($this->filePath, PATHINFO_EXTENSION) !== 'csv') {
+        if (strtolower(pathinfo($this->filePath, PATHINFO_EXTENSION)) !== 'csv') {
             return [
                 'success' => false,
                 'message' => 'We accepted only csv file'

@@ -15,10 +15,11 @@ class Transactions extends Model
         try {
             $this->db->prepare('INSERT INTO transactions (Date, `Check`, Description, Amount) VALUES (?, ?, ?, ?)')
                 ->execute([
-                    (new \DateTime($_POST['Date']))->format('Y-m-d'),
+                    //format : Jan 4,2021
+                    (new \DateTime($_POST['Date']))->format('M j,Y'),
                     $_POST['Check'],
                     $_POST['Description'],
-                    Converter::convertAmountToInt($_POST['Amount']) // Already using Converter
+                    Converter::convertAmountToFloat($_POST['Amount']) // Already using Converter
                 ]);
             return
                 [
@@ -38,10 +39,10 @@ class Transactions extends Model
         try {
             $this->db->prepare('INSERT INTO transactions (Date, `Check`, Description, Amount) VALUES (?, ?, ?, ?)')
                 ->execute([
-                    (new \DateTime($Transactions['Date']))->format('Y-m-d'),
+                    (new \DateTime($Transactions['Date']))->format('M j,Y'),
                     $Transactions['Check'],
                     $Transactions['Description'],
-                    Converter::convertAmountToInt($Transactions['Amount']) // Use Converter for CSV imported amounts
+                    Converter::convertAmountToFloat($Transactions['Amount']) // Use Converter for CSV imported amounts
                 ]);
             return
                 [
