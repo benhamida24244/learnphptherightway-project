@@ -1,3 +1,11 @@
+<?php
+
+
+use App\Controllers\TransactionController;
+
+$data = json_decode(TransactionController::show(), true);
+$analytics = TransactionController::analytics();
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -35,19 +43,30 @@
             </thead>
             <tbody>
                 <!-- TODO -->
+<?php foreach ($data as $transaction): ?>
+        <tr>
+            <td><?= htmlspecialchars($transaction['Date']) ?></td>
+            <td><?= htmlspecialchars($transaction['Check']) ?></td>
+            <td><?= htmlspecialchars($transaction['Description']) ?></td>
+            
+            <td style="color: <?= $transaction['Amount'] >= 0 ? 'green' : 'red' ?>">
+                <?= ($transaction['Amount'] < 0 ? '-' : '') . '$' . abs($transaction['Amount']) ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">Total Income:</th>
-                    <td><!-- TODO --></td>
+                    <td><?= $analytics['TotalIncome'] ?></td>
                 </tr>
                 <tr>
                     <th colspan="3">Total Expense:</th>
-                    <td><!-- TODO --></td>
+                    <td><?= $analytics['TotalExpense'] ?></td>
                 </tr>
                 <tr>
                     <th colspan="3">Net Total:</th>
-                    <td><!-- TODO --></td>
+                    <td><?= $analytics['TotalNet'] ?></td>
                 </tr>
             </tfoot>
         </table>

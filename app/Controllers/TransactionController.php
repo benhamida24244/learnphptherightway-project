@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Transactions;
 use App\Service\UploadDirectary;
+
 class TransactionController {
     public function upload() {
         $file = $_FILES['transaction_file'];
@@ -30,12 +31,11 @@ class TransactionController {
         $uploadDirectory->upload();
         $handle = fopen($uploadDirectory->filePath , 'r');
         fgetcsv($handle);
-        $Transactions = [];
         while(($row = fgetcsv($handle)) !== false)
             {
-                $Transactions = $this->extractTransactionsFromFile($row);
+
                 $transaction = new Transactions();
-                $transaction->addCombine($Transactions);
+                $transaction->addCombine($this->extractTransactionsFromFile($row));
             }
         fclose($handle);
         return json_encode([
@@ -53,10 +53,33 @@ class TransactionController {
             'Amount' => $row[3] // Pass the raw string; parsing will be handled in the model
         ];
     }
-    public function show()
+    public static function show()
     {
         $Transactions = new Transactions();
         $data = $Transactions->all();
         return json_encode($data);
+    }
+    public static function analytics()
+    {
+            $totalIncome = 0;
+            $totalExpense = 0;
+            $Transactions = new Transactions();
+            $data = $Transactions->all();
+            foreach($data as $transaction)
+                {
+                    if($transaction['Amount'] > 0)
+                        {
+                           $totalIncome += $transaction['Amount']; 
+                        }
+                    else
+                        {
+                           $totalExpense += $transaction['Amount']; 
+                        }
+                }
+            return [
+                'TotalIncome' => $totalIncome,
+                'TotalExpense' => $totalExpense,
+                'TotalNet' => $totalIncome + $totalExpense
+            ];
     }
     }

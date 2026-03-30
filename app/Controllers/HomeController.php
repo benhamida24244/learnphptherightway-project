@@ -10,7 +10,7 @@ class HomeController
 {
     public function index(): View
     {
-        return View::make('index');
+        return View::make('transactions');
     }
     public function about(): View
     {

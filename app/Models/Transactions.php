@@ -2,35 +2,14 @@
 
 namespace App\Models;
 
+
 use App\Model;
+use App\Service\Converter;
 use Dotenv\Parser\Value;
 use PDOException;
 
 class Transactions extends Model
 {
-    /**
-     * Cleans and parses an amount string into an integer.
-     * Handles various formats by extracting the numeric part and rounding.
-     *
-     * @param string $amountString The raw amount string (e.g., "$1,234.56", "Expense 50.25", "100.00").
-     * @return int The parsed amount as an integer.
-     */
-    private function parseAmount(string $amountString): int
-    {
-        // Remove thousands separators (commas)
-        $cleanedAmount = str_replace(',', '', $amountString);
-
-        // Extract the numeric part using regex: optional minus, digits, optional decimal with digits.
-        preg_match('/-?\d+(\.\d+)?/', $cleanedAmount, $matches);
-
-        $numericAmount = 0.0;
-        if (!empty($matches[0])) {
-            $numericAmount = (float) $matches[0];
-        }
-        // Round to the nearest integer, as the database column 'Amount' is INT.
-        return (int) round($numericAmount);
-    }
-
     public function add()
     {
         try {
@@ -39,7 +18,7 @@ class Transactions extends Model
                     (new \DateTime($_POST['Date']))->format('Y-m-d'),
                     $_POST['Check'],
                     $_POST['Description'],
-                    $this->parseAmount($_POST['Amount'])
+                    Converter::convertAmountToInt($_POST['Amount']) // Already using Converter
                 ]);
             return
                 [
@@ -62,7 +41,7 @@ class Transactions extends Model
                     (new \DateTime($Transactions['Date']))->format('Y-m-d'),
                     $Transactions['Check'],
                     $Transactions['Description'],
-                    $this->parseAmount($Transactions['Amount'])
+                    Converter::convertAmountToInt($Transactions['Amount']) // Use Converter for CSV imported amounts
                 ]);
             return
                 [
